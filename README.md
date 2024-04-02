@@ -44,8 +44,8 @@ $ ./install/install_CUDA11.6.sh
 
 #### 2. Datasets
 Download and unzip datasets under `[DATASET_ROOT]`:
-* Su *et al.*'s DVD dataset: [Google Drive](https://drive.google.com/open?id=1OY3mHiDbhCfVmwPA_gqckRDp4Ekryh7d&authuser=codeslake%40gmail.com&usp=drive_fs) \| [Dropbox](https://www.dropbox.com/s/8daduee9igqx5cw/DVD.zip?dl=1) 
-* Nah *et al.*'s GoPro dataset: [Google Drive](https://drive.google.com/open?id=1O_VHISCRlff0gmfIqBnAr0RupvVUrJ9j&authuser=codeslake%40gmail.com&usp=drive_fs) \| [Dropbox](https://www.dropbox.com/s/5ese6qtbwy7fsoh/nah.zip?dl=1)
+* Su *et al.*'s DVD dataset: [OneDrive](https://onedrive.live.com/download?resid=94530B7E5F49D254%21545&authkey=!AHZP3Je5-bBsuA4) \| [Dropbox](https://www.dropbox.com/s/8daduee9igqx5cw/DVD.zip?dl=1) 
+* Nah *et al.*'s GoPro dataset: [OneDrive](https://onedrive.live.com/download?resid=94530B7E5F49D254%21545&authkey=!AHZP3Je5-bBsuA4) \| [Dropbox](https://www.dropbox.com/s/5ese6qtbwy7fsoh/nah.zip?dl=1)
 * Nah *et al.*'s REDS dataset: [download script](https://gist.github.com/SeungjunNah/b10d369b92840cb8dd2118dd4f41d643)
 
 ```
@@ -67,7 +67,7 @@ Download and unzip datasets under `[DATASET_ROOT]`:
 > `[DATASET_ROOT]` can be modified with [`config.data_offset`](https://github.com/codeslake/RealTime_VDBLR/blob/main/configs/config.py#L44) in `./configs/config.py`.
 
 #### 3. Pre-trained models
-Download and unzip pretrained weights ([Google Drive](https://drive.google.com/drive/folders/1--m4c8rF1UmEdyu2AIM3DB-z5_03ZZxY?usp=sharing) \| [Dropbox](https://www.dropbox.com/sh/k1j7kdk7qyq04jg/AADNCY0guxTqZgL6sKAVyKcTa?dl=1)) under `./ckpt/`:
+Download pretrained weights ([OneDrive](https://1drv.ms/f/s!AlTSSV9-C1OUfCUDuV3ZGsIKMD8?e=shCoUh) \| [Dropbox](https://www.dropbox.com/sh/k1j7kdk7qyq04jg/AADNCY0guxTqZgL6sKAVyKcTa?dl=1)) and place them under `./ckpt/`:
 
 ```
 RealTime_VDBLR
