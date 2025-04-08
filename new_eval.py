@@ -31,8 +31,10 @@ def compute_weight_map(tensor_img):
     b, c, h, w = tensor_img.shape
     img_np = tensor_img[0].permute(1, 2, 0).cpu().numpy()
     img_gray = cv2.cvtColor((img_np * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY)
-    var = cv2.Laplacian(img_gray, cv2.CV_64F).var()
-    return var
+    sobelx = cv2.Sobel(img_gray, cv2.CV_64F, 1, 0, ksize=3)
+    sobely = cv2.Sobel(img_gray, cv2.CV_64F, 0, 1, ksize=3)
+    sobel_mag = np.sqrt(sobelx**2 + sobely**2)
+    return np.mean(sobel_mag)
 
 def mae(img1, img2):
     mae_0=mean_absolute_error(img1[:,:,0], img2[:,:,0],
