@@ -752,7 +752,7 @@ def eval(config):
         eval_quan_qual(config)
     
 x=list(range(len(psnr_weighted)))
-plt.figure(figsize(10,4))
+plt.figure(figsize=(10,5))
 plt.plot(x, psnr_weighted, label="With Heuristic Weighting", color="blue")
 plt.xlabel("Video Number")
 plt.ylabel("Mean PSNR of Video")
@@ -762,7 +762,7 @@ plt.show()
 
 
 y=list(range(len(ssim_weighted)))
-plt.figure(figsize(10,4))
+plt.figure(figsize=(10,5))
 plt.plot(y, ssim_weighted, label="With Heuristic Weighting", color="blue")
 plt.xlabel("Video Number")
 plt.ylabel("Mean SSIM of Video")
