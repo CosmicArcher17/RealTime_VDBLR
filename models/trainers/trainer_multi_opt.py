@@ -455,5 +455,5 @@ class DeblurNet(nn.Module):
 
     #####################################################
     def forward(self, I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,use_weights=True):
-        outs = self.Network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,use_weights)
+        outs = self.network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,use_weights)
         return outs
