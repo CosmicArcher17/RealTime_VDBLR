@@ -426,7 +426,7 @@ class DeblurNet(nn.Module):
         if self.rank <= 0: print(toRed('\tinitializing deblurring network'))
 
         lib = importlib.import_module('models.archs.{}'.format(config.network))
-        self.Network = lib.Network(config, is_distill)
+        self.network = lib.Network(config, is_distill)
 
     def weights_init(self, m):
         if isinstance(m, torch.nn.Conv2d) or isinstance(m, torch.nn.ConvTranspose2d):
