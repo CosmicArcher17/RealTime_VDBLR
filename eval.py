@@ -139,11 +139,11 @@ def eval_quan_qual(config):
                 torch.cuda.synchronize()
                 if 'amp' not in config.mode:
                     init_time = time.time()
-                    out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame)
+                    out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,False)
                 else:
                     with torch.cuda.amp.autocast():
                         init_time = time.time()
-                        out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame)
+                        out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,False)
                 torch.cuda.synchronize()
                 itr_time = time.time() - init_time
                 out['result'] = torch.clamp(out['result'], 0, 1)
@@ -235,23 +235,20 @@ def eval_quan_qual(config):
     
     x=list(range(len(psnr_unweighted)))
     y=list(range(len(ssim_unweighted)))
-    fig, axs = plt.subplots(1, 2, figsize=(14, 5))
+    plt.figure(figsize=(12, 6))
+    plt.plot(x, psnr_unweighted, label="Unweighted PSNR", color="red")
+    plt.xlabel("Video Index")
+    plt.ylabel("PSNR")
+    plt.title("PSNR Comparison")
+    plt.legend()
+    plt.show()
     
-    # PSNR Plot
-    axs[0].plot(x, psnr_unweighted, label="Without Heuristic Weighting", color="red")
-    axs[0].set_xlabel("Video Number")
-    axs[0].set_ylabel("Mean PSNR of Video")
-    axs[0].set_title("Unweighted PSNR")
-    axs[0].legend()
-    
-    # SSIM Plot
-    axs[1].plot(y, ssim_unweighted, label="Without Heuristic Weighting", color="red")
-    axs[1].set_xlabel("Video Number")
-    axs[1].set_ylabel("Mean SSIM of Video")
-    axs[1].set_title("Unweighted SSIM")
-    axs[1].legend()
-    
-    plt.tight_layout()
+    plt.figure(figsize=(12, 6))
+    plt.plot(y, ssim_unweighted, label="Unweighted SSIM", color="red")
+    plt.xlabel("Video Index")
+    plt.ylabel("SSIM")
+    plt.title("SSIM Comparison")
+    plt.legend()
     plt.show()
 
 def eval_MC_cost(config):
