@@ -168,7 +168,8 @@ class Network(nn.Module):
         pre_f_l, corr_l, flow_l = [], [], []
         aux_l = []
         motion_layer_index = list(range(self.HG_num - len(self.skip_corr_index)))
-        with torch.no_grad():
+        if use_weights:
+            with torch.no_grad():
             # Compute Sobel-based sharpness weights
             frames = [I_prev_prev, I_prev, I_curr, I_next, I_next_next]
             weights = []
@@ -184,12 +185,9 @@ class Network(nn.Module):
             I_curr = I_curr * weights[2]
             I_next = I_next * weights[3]
             I_next_next = I_next_next * weights[4]
-
+        else:
+            print("No weights used")
         base = self.base_conv(I_curr)
-    
-        weights = [0.1, 0.2, 0.4, 0.2, 0.1]
-        frames = [I_prev_prev, I_prev, R_prev, I_next, I_next_next]
-        weighted = []
         
         for i, frame in enumerate(frames):
             weighted.append(frame * weights[i])
