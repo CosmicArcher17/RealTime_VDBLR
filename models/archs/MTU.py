@@ -170,21 +170,21 @@ class Network(nn.Module):
         motion_layer_index = list(range(self.HG_num - len(self.skip_corr_index)))
         if use_weights:
             with torch.no_grad():
-            # Compute Sobel-based sharpness weights
-            frames = [I_prev_prev, I_prev, I_curr, I_next, I_next_next]
-            weights = []
-            for f in frames:
-                weights.append(compute_sobel_weight_map(f))
-        
-            weights = torch.tensor(weights, device=I_curr.device, dtype=I_curr.dtype)
-            weights = weights / weights.sum()  # normalize to sum to 1
-        
-            # Apply weights to each frame
-            I_prev_prev = I_prev_prev * weights[0]
-            I_prev = I_prev * weights[1]
-            I_curr = I_curr * weights[2]
-            I_next = I_next * weights[3]
-            I_next_next = I_next_next * weights[4]
+                frames = [I_prev_prev, I_prev, I_curr, I_next, I_next_next]
+                weights = []
+                for f in frames:
+                    weights.append(compute_sobel_weight_map(f))
+            
+                weights = torch.tensor(weights, device=I_curr.device, dtype=I_curr.dtype)
+                weights = weights / weights.sum()  # normalize to sum to 1
+            
+                # Apply weights to each frame
+                I_prev_prev = I_prev_prev * weights[0]
+                I_prev = I_prev * weights[1]
+                I_curr = I_curr * weights[2]
+                I_next = I_next * weights[3]
+                I_next_next = I_next_next * weights[4]
+
         else:
             print("No weights used")
         base = self.base_conv(I_curr)
