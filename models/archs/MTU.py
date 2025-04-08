@@ -8,6 +8,7 @@ from models.utils import FM
 import torch.nn.utils.weight_norm as wn
 
 import time
+import cv2
 import copy
 
 class HG(nn.Module):
@@ -149,12 +150,49 @@ class Network(nn.Module):
         self.pre_f_l_prev = None
         self.post_f_prev = None
 
-    def forward(self, I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame):
+    def forward(self, I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,use_weights):
+        def compute_sobel_weight_map(tensor_img):
+            # Assumes input shape: [B, C, H, W]
+            b, c, h, w = tensor_img.shape
+            img_np = tensor_img[0].permute(1, 2, 0).detach().cpu().numpy()  # (H, W, C)
+            img_gray = cv2.cvtColor((img_np * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY)
+        
+            # Sobel edge detection
+            sobelx = cv2.Sobel(img_gray, cv2.CV_64F, 1, 0, ksize=3)
+            sobely = cv2.Sobel(img_gray, cv2.CV_64F, 0, 1, ksize=3)
+            sobel_magnitude = np.sqrt(sobelx ** 2 + sobely ** 2)
+        
+            # Return mean edge strength as sharpness score
+            return np.mean(sobel_magnitude)
+
         pre_f_l, corr_l, flow_l = [], [], []
         aux_l = []
         motion_layer_index = list(range(self.HG_num - len(self.skip_corr_index)))
+        with torch.no_grad():
+            # Compute Sobel-based sharpness weights
+            frames = [I_prev_prev, I_prev, I_curr, I_next, I_next_next]
+            weights = []
+            for f in frames:
+                weights.append(compute_sobel_weight_map(f))
+        
+            weights = torch.tensor(weights, device=I_curr.device, dtype=I_curr.dtype)
+            weights = weights / weights.sum()  # normalize to sum to 1
+        
+            # Apply weights to each frame
+            I_prev_prev = I_prev_prev * weights[0]
+            I_prev = I_prev * weights[1]
+            I_curr = I_curr * weights[2]
+            I_next = I_next * weights[3]
+            I_next_next = I_next_next * weights[4]
 
         base = self.base_conv(I_curr)
+    
+        weights = [0.1, 0.2, 0.4, 0.2, 0.1]
+        frames = [I_prev_prev, I_prev, R_prev, I_next, I_next_next]
+        weighted = []
+        
+        for i, frame in enumerate(frames):
+            weighted.append(frame * weights[i])
         inp_prev = self.inp_prev_conv(torch.cat((I_prev_prev, I_prev, R_prev, I_next, I_next_next), axis = 1))
         n = torch.cat((base, inp_prev), axis = 1)
         for i in range(self.HG_num):
