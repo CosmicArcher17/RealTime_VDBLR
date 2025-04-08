@@ -234,19 +234,24 @@ def eval_quan_qual(config):
     print('\nSaving root: ', save_path_root_deblur)
     
     x=list(range(len(psnr_unweighted)))
-    plt.figure(figsize=(10,5))
-    plt.plot(x, psnr_unweighted, label="Without Heuristic Weighting", color="red")
-    plt.xlabel("Video Number")
-    plt.ylabel("Mean PSNR of Video")
-    plt.title("Unweighted PSNR")
-    plt.show()
-    
     y=list(range(len(ssim_unweighted)))
-    plt.figure(figsize=(10,5))
-    plt.plot(y, ssim_unweighted, label="Without Heuristic Weighting", color="red")
-    plt.xlabel("Video Number")
-    plt.ylabel("Mean SSIM of Video")
-    plt.title("Unweighted SSIM")
+    fig, axs = plt.subplots(1, 2, figsize=(14, 5))
+    
+    # PSNR Plot
+    axs[0].plot(x, psnr_unweighted, label="Without Heuristic Weighting", color="red")
+    axs[0].set_xlabel("Video Number")
+    axs[0].set_ylabel("Mean PSNR of Video")
+    axs[0].set_title("Unweighted PSNR")
+    axs[0].legend()
+    
+    # SSIM Plot
+    axs[1].plot(y, ssim_unweighted, label="Without Heuristic Weighting", color="red")
+    axs[1].set_xlabel("Video Number")
+    axs[1].set_ylabel("Mean SSIM of Video")
+    axs[1].set_title("Unweighted SSIM")
+    axs[1].legend()
+    
+    plt.tight_layout()
     plt.show()
 
 def eval_MC_cost(config):
