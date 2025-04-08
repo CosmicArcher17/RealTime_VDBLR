@@ -144,15 +144,13 @@ def eval_quan_qual(config):
             I_next = Is[:, 3, :, :, :]
             I_next_next = Is[:, 4, :, :, :]
 
-                        # Compute weights for each frame (higher = sharper)
-            weights = []
-            for frame in [I_prev_prev, I_prev, I_curr, I_next, I_next_next]:
-                weights.append(compute_weight_map(frame))
-            
-            # Normalize weights to [0,1]
-            weights = torch.tensor(weights)
+            # Compute raw weights
+            raw_weights = [compute_weight_map(frame) for frame in [I_prev_prev, I_prev, I_curr, I_next, I_next_next]]
+            raw_weights = [w**2 for w in raw_weights]
+            weights = torch.tensor(raw_weights).to(I_curr.device)
             weights = weights / weights.sum()
-            
+            print("Amplified Weights:", weights)
+
             # Apply weights to each frame (assumes batch size 1)
             I_prev_prev = I_prev_prev * weights[0]
             I_prev = I_prev * weights[1]
