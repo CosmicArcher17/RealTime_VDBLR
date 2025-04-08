@@ -19,7 +19,7 @@ import random
 from models import create_model
 from utils import *
 from ckpt_manager import CKPT_Manager
-
+import matplotlib.pyplot as plt
 # device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 #torch.backends.cudnn.enabled = False
 torch.backends.cudnn.benchmark = False
