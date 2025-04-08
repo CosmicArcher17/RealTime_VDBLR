@@ -150,7 +150,7 @@ class Network(nn.Module):
         self.pre_f_l_prev = None
         self.post_f_prev = None
 
-    def forward(self, I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,use_weights):
+    def forward(self, I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,use_weights=True):
         def compute_sobel_weight_map(tensor_img):
             # Assumes input shape: [B, C, H, W]
             b, c, h, w = tensor_img.shape
