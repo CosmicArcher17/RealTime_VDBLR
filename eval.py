@@ -209,11 +209,11 @@ def eval_quan_qual(config):
         # video average
         PSNR_mean_total += PSNR_mean
         PSNR_mean = PSNR_mean / len(frame_list)
-        psnr_unweighted.append(PSNR_mean_total)
+        psnr_unweighted.append(PSNR_mean)
         
         SSIM_mean_total += SSIM_mean
         SSIM_mean = SSIM_mean / len(frame_list)
-        ssim_unweighted.append(SSIM_mean_total)
+        ssim_unweighted.append(SSIM_mean)
         
         print('[MEAN EVAL {}|{}|{}][{}/{}] {} PSNR: {:.5f}, SSIM: {:.5f} ({:.5f}sec)\n\n'.format(config.mode, config.EVAL.data, video_name, i + 1, len(blur_file_path_list), frame_name, PSNR_mean, SSIM_mean, total_itr_time_video / len(frame_list)))
         with open(os.path.join(save_path_root_deblur_score, 'score_{}.txt'.format(config.EVAL.data)), 'a') as file:
