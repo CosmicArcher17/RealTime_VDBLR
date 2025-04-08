@@ -21,6 +21,7 @@ from data_loader.utils import refine_image, read_frame, load_file_list, norm
 from ckpt_manager import CKPT_Manager
 from models.utils import warp, norm_res_vis, upsample
 
+import matlplotlib.pyplot as plt
 from models import create_model
 psnr_unweighted=[]
 ssim_unweighted=[]
