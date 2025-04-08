@@ -188,10 +188,6 @@ class Network(nn.Module):
         else:
             print("No weights used")
         base = self.base_conv(I_curr)
-        
-        for i, frame in enumerate(frames):
-            weighted.append(frame * weights[i])
-        inp_prev = self.inp_prev_conv(torch.cat((I_prev_prev, I_prev, R_prev, I_next, I_next_next), axis = 1))
         n = torch.cat((base, inp_prev), axis = 1)
         for i in range(self.HG_num):
             ## MTU
