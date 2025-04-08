@@ -139,11 +139,11 @@ def eval_quan_qual(config):
                 torch.cuda.synchronize()
                 if 'amp' not in config.mode:
                     init_time = time.time()
-                    out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,False)
+                    out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,use_weights=False)
                 else:
                     with torch.cuda.amp.autocast():
                         init_time = time.time()
-                        out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,False)
+                        out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,use_weights=False)
                 torch.cuda.synchronize()
                 itr_time = time.time() - init_time
                 out['result'] = torch.clamp(out['result'], 0, 1)
