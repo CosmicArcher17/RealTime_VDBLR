@@ -262,7 +262,6 @@ def eval_quan_qual(config):
     plt.xlabel("Video Number")
     plt.ylabel("Mean PSNR of Video")
     plt.title("Unweighted PSNR")
-    plt.savefig("unweighted_psnr.png")
     plt.show()
     
     y=list(range(len(ssim_unweighted)))
@@ -271,7 +270,6 @@ def eval_quan_qual(config):
     plt.xlabel("Video Number")
     plt.ylabel("Mean SSIM of Video")
     plt.title("Unweighted SSIM")
-    plt.savefig("unweighted_ssim.png")
     plt.show()
 
 def eval_MC_cost(config):
