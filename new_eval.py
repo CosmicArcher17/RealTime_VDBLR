@@ -326,7 +326,21 @@ def eval_MC_cost(config):
             I_curr = Is[:, 2, :, :, :]
             I_next = Is[:, 3, :, :, :]
             I_next_next = Is[:, 4, :, :, :]
-
+            
+            weights = []
+            for frame in [I_prev_prev, I_prev, I_curr, I_next, I_next_next]:
+                weights.append(compute_weight_map(frame))
+            
+            # Normalize weights to [0,1]
+            weights = torch.tensor(weights)
+            weights = weights / weights.sum()
+            
+            # Apply weights to each frame (assumes batch size 1)
+            I_prev_prev = I_prev_prev * weights[0]
+            I_prev = I_prev * weights[1]
+            I_curr = I_curr * weights[2]
+            I_next = I_next * weights[3]
+            I_next_next = I_next_next * weights[4]
             #######################################################################
             ## run network
             with torch.no_grad():
@@ -362,9 +376,10 @@ def eval_MC_cost(config):
         # video average
         PSNR_mean_total += PSNR_mean
         PSNR_mean = PSNR_mean / len(frame_list)
-
+        psnr_weighted.append(PSNR_mean_total)
         SSIM_mean_total += SSIM_mean
         SSIM_mean = SSIM_mean / len(frame_list)
+        ssim_weighted.append(SSIM_mean_total)
 
         print('[MEAN EVAL {}|{}|{}][{}/{}] {} PSNR: {:.5f}, SSIM: {:.5f} ({:.5f}sec/MC_time:{:.5f}sec)\n\n'.format(config.mode, config.EVAL.data, video_name, i + 1, len(blur_file_path_list), frame_name, PSNR_mean, SSIM_mean, total_itr_time_video / len(frame_list), total_MC_time_video / len(frame_list)))
         with open(os.path.join(save_path_root_deblur_score, 'score_{}.txt'.format(config.EVAL.data)), 'a') as file:
@@ -384,6 +399,22 @@ def eval_MC_cost(config):
         file.write('\n[TOTAL {}|{}] PSNR: {:.5f} SSIM: {:.5f} ({:.5f}sec/MC_time:{:.5f}sec)\n'.format(ckpt_name, config.EVAL.data, PSNR_mean_total, SSIM_mean_total, total_itr_time, total_MC_cost))
         file.close()
     print('\nSaving root: ', save_path_root_deblur)
+
+    x=list(range(len(psnr_unweighted)))
+    plt.figure(figsize=(10,5))
+    plt.plot(x, psnr_unweighted, label="Without Heuristic Weighting", color="red")
+    plt.xlabel("Video Number")
+    plt.ylabel("Mean PSNR of Video")
+    plt.title("Unweighted PSNR")
+    plt.show()
+    
+    y=list(range(len(ssim_unweighted)))
+    plt.figure(figsize=(10,5))
+    plt.plot(y, ssim_unweighted, label="Without Heuristic Weighting", color="red")
+    plt.xlabel("Video Number")
+    plt.ylabel("Mean SSIM of Video")
+    plt.title("Unweighted SSIM")
+    plt.show()
 
 def eval_warp(config):
     mode = config.EVAL.eval_mode
@@ -441,7 +472,21 @@ def eval_warp(config):
 
             I_prev_gt = Is_gt[:, 1, :, :, :]
             I_curr_gt = Is_gt[:, 2, :, :, :]
-
+            
+            weights = []
+            for frame in [I_prev_prev, I_prev, I_curr, I_next, I_next_next]:
+                weights.append(compute_weight_map(frame))
+            
+            # Normalize weights to [0,1]
+            weights = torch.tensor(weights)
+            weights = weights / weights.sum()
+            
+            # Apply weights to each frame (assumes batch size 1)
+            I_prev_prev = I_prev_prev * weights[0]
+            I_prev = I_prev * weights[1]
+            I_curr = I_curr * weights[2]
+            I_next = I_next * weights[3]
+            I_next_next = I_next_next * weights[4]
             #######################################################################
             ## run network
             with torch.no_grad():
@@ -515,9 +560,10 @@ def eval_warp(config):
         # video average
         PSNR_mean_total += PSNR_mean
         PSNR_mean = PSNR_mean / len(frame_list)
-
+        psnr_weighted.append(PSNR_mean_total)
         SSIM_mean_total += SSIM_mean
         SSIM_mean = SSIM_mean / len(frame_list)
+        ssim_weighted.append(SSIM_mean_total)
 
         print('[MEAN EVAL {}|{}|{}][{}/{}] {} PSNR: {:.5f}, SSIM: {:.5f} ({:.5f}sec)\n\n'.format(config.mode, config.EVAL.data, video_name, i + 1, len(blur_file_path_list), frame_name, PSNR_mean, SSIM_mean, total_itr_time_video / len(frame_list)))
         with open(os.path.join(save_path_root_deblur_score, 'score_{}.txt'.format(config.EVAL.data)), 'a') as file:
@@ -536,6 +582,22 @@ def eval_warp(config):
         file.write('\n[TOTAL {}|{}] PSNR: {:.5f} SSIM: {:.5f} ({:.5f}sec)\n'.format(ckpt_name, config.EVAL.data, PSNR_mean_total, SSIM_mean_total, total_itr_time))
         file.close()
     print('\nSaving root: ', save_path_root_deblur)
+
+    x=list(range(len(psnr_unweighted)))
+    plt.figure(figsize=(10,5))
+    plt.plot(x, psnr_unweighted, label="Without Heuristic Weighting", color="red")
+    plt.xlabel("Video Number")
+    plt.ylabel("Mean PSNR of Video")
+    plt.title("Unweighted PSNR")
+    plt.show()
+    
+    y=list(range(len(ssim_unweighted)))
+    plt.figure(figsize=(10,5))
+    plt.plot(y, ssim_unweighted, label="Without Heuristic Weighting", color="red")
+    plt.xlabel("Video Number")
+    plt.ylabel("Mean SSIM of Video")
+    plt.title("Unweighted SSIM")
+    plt.show()
 
 
 def eval_feat(config):
