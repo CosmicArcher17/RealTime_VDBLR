@@ -130,21 +130,6 @@ def eval_quan_qual(config):
             I_curr = Is[:, 2, :, :, :]
             I_next = Is[:, 3, :, :, :]
             I_next_next = Is[:, 4, :, :, :]
-
-                        # Compute weights
-            weights = []
-            for frame in [I_prev_prev, I_prev, I_curr, I_next, I_next_next]:
-                weights.append(compute_weight_map(frame))
-            
-            weights = torch.tensor(weights).to(I_curr.device)
-            weights = weights / weights.sum()
-            
-            # Apply heuristic weights
-            I_prev_prev *= weights[0]
-            I_prev *= weights[1]
-            I_curr *= weights[2]
-            I_next *= weights[3]
-            I_next_next *= weights[4]
             #######################################################################
             ## run network
             with torch.no_grad():
