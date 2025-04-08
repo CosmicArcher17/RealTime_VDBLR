@@ -27,15 +27,6 @@ import matplotlib.pyplot as plt
 psnr_weighted=[]
 ssim_weighted=[]
 
-def compute_weight_map(tensor_img):
-    b, c, h, w = tensor_img.shape
-    img_np = tensor_img[0].permute(1, 2, 0).cpu().numpy()
-    img_gray = cv2.cvtColor((img_np * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY)
-    sobelx = cv2.Sobel(img_gray, cv2.CV_64F, 1, 0, ksize=3)
-    sobely = cv2.Sobel(img_gray, cv2.CV_64F, 0, 1, ksize=3)
-    sobel_mag = np.sqrt(sobelx**2 + sobely**2)
-    return np.mean(sobel_mag)
-
 def mae(img1, img2):
     mae_0=mean_absolute_error(img1[:,:,0], img2[:,:,0],
                               multioutput='uniform_average')
@@ -143,31 +134,17 @@ def eval_quan_qual(config):
             I_curr = Is[:, 2, :, :, :]
             I_next = Is[:, 3, :, :, :]
             I_next_next = Is[:, 4, :, :, :]
-
-            # Compute raw weights
-            raw_weights = [compute_weight_map(frame) for frame in [I_prev_prev, I_prev, I_curr, I_next, I_next_next]]
-            raw_weights = [w**2 for w in raw_weights]
-            weights = torch.tensor(raw_weights).to(I_curr.device)
-            weights = weights / weights.sum()
-            print("Amplified Weights:", weights)
-
-            # Apply weights to each frame (assumes batch size 1)
-            I_prev_prev = I_prev_prev * weights[0]
-            I_prev = I_prev * weights[1]
-            I_curr = I_curr * weights[2]
-            I_next = I_next * weights[3]
-            I_next_next = I_next_next * weights[4]
             #######################################################################
             ## run network
             with torch.no_grad():
                 torch.cuda.synchronize()
                 if 'amp' not in config.mode:
                     init_time = time.time()
-                    out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame)
+                    out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,True)
                 else:
                     with torch.cuda.amp.autocast():
                         init_time = time.time()
-                        out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame)
+                        out = network(I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,True)
                 torch.cuda.synchronize()
                 itr_time = time.time() - init_time
                 out['result'] = torch.clamp(out['result'], 0, 1)
