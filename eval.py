@@ -238,25 +238,23 @@ def eval_quan_qual(config):
 
     # PSNR plot
     plt.figure(figsize=(10, 4))
-    plt.plot(x, psnr_without_weighting, label="Without Weighting", color="red")
+    plt.plot(x, psnr_unweighted, label="Without Weighting", color="red")
     plt.xlabel("Frame Index")
     plt.ylabel("PSNR")
     plt.title("PSNR Comparison")
     plt.legend()
     plt.grid()
     plt.savefig("psnr_comparison.png")
-    plt.close()
     
     # SSIM plot
     plt.figure(figsize=(10, 4))
-    plt.plot(y, ssim_without_weighting, label="Without Weighting", color="red")
+    plt.plot(y, ssim_unweighted, label="Without Weighting", color="red")
     plt.xlabel("Frame Index")
     plt.ylabel("SSIM")
     plt.title("SSIM Comparison")
     plt.legend()
     plt.grid()
     plt.savefig("ssim_comparison.png")
-    plt.close()
 
 
 def eval_MC_cost(config):
