@@ -164,7 +164,6 @@ class Network(nn.Module):
         
             # Return mean edge strength as sharpness score
             return np.mean(sobel_magnitude)
-        print(I_curr.shape[0])
         pre_f_l, corr_l, flow_l = [], [], []
         aux_l = []
         motion_layer_index = list(range(self.HG_num - len(self.skip_corr_index)))
