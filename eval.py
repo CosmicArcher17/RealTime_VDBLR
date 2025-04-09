@@ -235,21 +235,29 @@ def eval_quan_qual(config):
     
     x=list(range(len(psnr_unweighted)))
     y=list(range(len(ssim_unweighted)))
-    plt.figure(figsize=(12, 6))
-    plt.plot(x, psnr_unweighted, label="Unweighted PSNR", color="red")
-    plt.xlabel("Video Index")
+
+    # PSNR plot
+    plt.figure(figsize=(10, 4))
+    plt.plot(x, psnr_without_weighting, label="Without Weighting", color="red")
+    plt.xlabel("Frame Index")
     plt.ylabel("PSNR")
     plt.title("PSNR Comparison")
     plt.legend()
-    plt.show()
+    plt.grid()
+    plt.savefig("psnr_comparison.png")
+    plt.close()
     
-    plt.figure(figsize=(12, 6))
-    plt.plot(y, ssim_unweighted, label="Unweighted SSIM", color="red")
-    plt.xlabel("Video Index")
+    # SSIM plot
+    plt.figure(figsize=(10, 4))
+    plt.plot(y, ssim_without_weighting, label="Without Weighting", color="red")
+    plt.xlabel("Frame Index")
     plt.ylabel("SSIM")
     plt.title("SSIM Comparison")
     plt.legend()
-    plt.show()
+    plt.grid()
+    plt.savefig("ssim_comparison.png")
+    plt.close()
+
 
 def eval_MC_cost(config):
     mode = config.EVAL.eval_mode
