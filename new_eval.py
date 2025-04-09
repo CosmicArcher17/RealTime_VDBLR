@@ -175,7 +175,7 @@ def eval_quan_qual(config):
                 SSIM_mean += SSIM
 
             frame_name = os.path.basename(blur_file_path_list[i][j])
-            print('[EVAL {}|{}|{}][{}/{}][{}/{}] {} PSNR: {:.5f}, SSIM: {:.5f} ({:.5f}sec)'.format(config.mode, config.EVAL.data, video_name, i + 1, len(blur_file_path_list), j + 1, len(frame_list), frame_name, PSNR, SSIM, itr_time),I_curr.shape[0])
+            print(I_curr.shape[0])
             with open(os.path.join(save_path_root_deblur_score, 'score_{}.txt'.format(config.EVAL.data)), 'w' if (i == 0 and j == 0) else 'a') as file:
                 file.write('[EVAL {}|{}|{}][{}/{}][{}/{}] {} PSNR: {:.5f}, SSIM: {:.5f} ({:.5f}sec)\n'.format(config.mode, config.EVAL.data, video_name, i + 1, len(blur_file_path_list), j + 1, len(frame_list), frame_name, PSNR, SSIM, itr_time))
                 file.close()
