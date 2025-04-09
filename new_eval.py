@@ -801,24 +801,15 @@ def eval(config):
         eval_quan_qual(config)
         x=list(range(1,len(psnr_weighted)+1))
         y=list(range(1,len(psnr_weighted)+1))
-        # Plot PSNR
-        plt.figure(figsize=(10, 5))
+        
         plt.plot(x, psnr_weighted, label="Weighted PSNR", marker='o', color='red')
         plt.title("Weighted PSNR")
         plt.xlabel("Video Number")
         plt.ylabel("PSNR")
-        plt.grid(True)
-        plt.legend()
-        plt.tight_layout()
         plt.show()
         
-        # Plot SSIM
-        plt.figure(figsize=(10, 5))
         plt.plot(x, ssim_weighted, label="Weighted SSIM", marker='o', color='blue')
         plt.title("Unweighted SSIM")
         plt.xlabel("Video Number")
         plt.ylabel("SSIM")
-        plt.grid(True)
-        plt.legend()
-        plt.tight_layout()
         plt.show()
