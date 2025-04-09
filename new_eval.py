@@ -175,7 +175,7 @@ def eval_quan_qual(config):
                 SSIM_mean += SSIM
 
             frame_name = os.path.basename(blur_file_path_list[i][j])
-            print('[EVAL {}|{}|{}][{}/{}][{}/{}] {} PSNR: {:.5f}, SSIM: {:.5f} ({:.5f}sec)'.format(config.mode, config.EVAL.data, video_name, i + 1, len(blur_file_path_list), j + 1, len(frame_list), frame_name, PSNR, SSIM, itr_time))
+            print('[EVAL {}|{}|{}][{}/{}][{}/{}] {} PSNR: {:.5f}, SSIM: {:.5f} ({:.5f}sec)'.format(config.mode, config.EVAL.data, video_name, i + 1, len(blur_file_path_list), j + 1, len(frame_list), frame_name, PSNR, SSIM, itr_time),I_curr.shape[0])
             with open(os.path.join(save_path_root_deblur_score, 'score_{}.txt'.format(config.EVAL.data)), 'w' if (i == 0 and j == 0) else 'a') as file:
                 file.write('[EVAL {}|{}|{}][{}/{}][{}/{}] {} PSNR: {:.5f}, SSIM: {:.5f} ({:.5f}sec)\n'.format(config.mode, config.EVAL.data, video_name, i + 1, len(blur_file_path_list), j + 1, len(frame_list), frame_name, PSNR, SSIM, itr_time))
                 file.close()
@@ -206,7 +206,6 @@ def eval_quan_qual(config):
                         #vutils.save_image(gt, '{}'.format(save_file_path_deblur_gt), nrow=1, padding = 0, normalize = False)
                         gt_cpu = gt.cpu().numpy()[0].transpose(1, 2, 0)
                         cv2.imwrite(save_file_path_deblur_gt, cv2.cvtColor(gt_cpu*255, cv2.COLOR_BGR2RGB))
-                print(I_curr[0].shape)
 
         # video average
         PSNR_mean_total += PSNR_mean
