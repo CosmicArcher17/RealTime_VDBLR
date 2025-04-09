@@ -27,6 +27,17 @@ import matplotlib.pyplot as plt
 psnr_weighted=[]
 ssim_weighted=[]
 
+def compute_sobel_weight_map(tensor_img):
+    b, c, h, w = tensor_img.shape
+    img_np = tensor_img[0].permute(1, 2, 0).cpu().numpy()
+    img_gray = cv2.cvtColor((img_np * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY)
+    
+    grad_x = cv2.Sobel(img_gray, cv2.CV_64F, 1, 0, ksize=3)
+    grad_y = cv2.Sobel(img_gray, cv2.CV_64F, 0, 1, ksize=3)
+    magnitude = np.sqrt(grad_x**2 + grad_y**2)
+    
+    return float(np.mean(magnitude))
+
 def mae(img1, img2):
     mae_0=mean_absolute_error(img1[:,:,0], img2[:,:,0],
                               multioutput='uniform_average')
@@ -134,6 +145,23 @@ def eval_quan_qual(config):
             I_curr = Is[:, 2, :, :, :]
             I_next = Is[:, 3, :, :, :]
             I_next_next = Is[:, 4, :, :, :]
+
+            # Compute weights for each of the 5 frames
+            weights = []
+            for frame in [I_prev_prev, I_prev, I_curr, I_next, I_next_next]:
+                weights.append(compute_sobel_weight_map(frame))
+            
+            # Normalize weights
+            weights = torch.tensor(weights, device=I_curr.device, dtype=I_curr.dtype)
+            weights = weights / weights.sum()
+            
+            # Apply them safely (batch size = 1)
+            I_prev_prev = I_prev_prev * weights[0]
+            I_prev      = I_prev      * weights[1]
+            I_curr      = I_curr      * weights[2]
+            I_next      = I_next      * weights[3]
+            I_next_next = I_next_next * weights[4]
+
             #######################################################################
             ## run network
             with torch.no_grad():
