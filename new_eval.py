@@ -263,24 +263,25 @@ def eval_quan_qual(config):
     
     x=list(range(len(psnr_unweighted)))
     y=list(range(len(ssim_unweighted)))
-    fig, axs = plt.subplots(1, 2, figsize=(14, 5))
+    # PSNR plot
+    plt.figure(figsize=(10, 4))
+    plt.plot(x, psnr_unweighted, label="Without Weighting", color="red")
+    plt.xlabel("Frame Index")
+    plt.ylabel("PSNR")
+    plt.title("PSNR Comparison")
+    plt.legend()
+    plt.grid()
+    plt.savefig("psnr_comparison.png")
     
-    # PSNR Plot
-    axs[0].plot(x, psnr_unweighted, label="Without Heuristic Weighting", color="red")
-    axs[0].set_xlabel("Video Number")
-    axs[0].set_ylabel("Mean PSNR of Video")
-    axs[0].set_title("Unweighted PSNR")
-    axs[0].legend()
-    
-    # SSIM Plot
-    axs[1].plot(y, ssim_unweighted, label="Without Heuristic Weighting", color="red")
-    axs[1].set_xlabel("Video Number")
-    axs[1].set_ylabel("Mean SSIM of Video")
-    axs[1].set_title("Unweighted SSIM")
-    axs[1].legend()
-    
-    plt.tight_layout()
-    plt.show()
+    # SSIM plot
+    plt.figure(figsize=(10, 4))
+    plt.plot(y, ssim_unweighted, label="Without Weighting", color="red")
+    plt.xlabel("Frame Index")
+    plt.ylabel("SSIM")
+    plt.title("SSIM Comparison")
+    plt.legend()
+    plt.grid()
+    plt.savefig("ssim_comparison.png")
 
 def eval_MC_cost(config):
     mode = config.EVAL.eval_mode
