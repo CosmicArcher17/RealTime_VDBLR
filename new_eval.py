@@ -260,29 +260,6 @@ def eval_quan_qual(config):
         file.write('\n[TOTAL {}|{}] PSNR: {:.5f} SSIM: {:.5f} ({:.5f}sec)\n'.format(ckpt_name, config.EVAL.data, PSNR_mean_total, SSIM_mean_total, total_itr_time))
         file.close()
     print('\nSaving root: ', save_path_root_deblur)
-    
-    x=list(range(len(psnr_unweighted)))
-    y=list(range(len(ssim_unweighted)))
-    # PSNR plot
-    plt.figure(figsize=(10, 4))
-    plt.plot(x, psnr_unweighted, label="Without Weighting", color="red")
-    plt.xlabel("Frame Index")
-    plt.ylabel("PSNR")
-    plt.title("PSNR Comparison")
-    plt.legend()
-    plt.grid()
-    plt.savefig("psnr_comparison.png")
-    
-    # SSIM plot
-    plt.figure(figsize=(10, 4))
-    plt.plot(y, ssim_unweighted, label="Without Weighting", color="red")
-    plt.xlabel("Frame Index")
-    plt.ylabel("SSIM")
-    plt.title("SSIM Comparison")
-    plt.legend()
-    plt.grid()
-    plt.savefig("ssim_comparison.png")
-
 def eval_MC_cost(config):
     mode = config.EVAL.eval_mode
     network, save_path_root_deblur, save_path_root_deblur_score, ckpt_name,\
@@ -410,21 +387,6 @@ def eval_MC_cost(config):
         file.write('\n[TOTAL {}|{}] PSNR: {:.5f} SSIM: {:.5f} ({:.5f}sec/MC_time:{:.5f}sec)\n'.format(ckpt_name, config.EVAL.data, PSNR_mean_total, SSIM_mean_total, total_itr_time, total_MC_cost))
         file.close()
     print('\nSaving root: ', save_path_root_deblur)
-
-    x=list(range(len(psnr_unweighted)))
-    plt.plot(x, psnr_unweighted, label="Without Heuristic Weighting", color="red")
-    plt.xlabel("Video Number")
-    plt.ylabel("Mean PSNR of Video")
-    plt.title("Unweighted PSNR")
-    plt.show()
-    
-    y=list(range(len(ssim_unweighted)))
-    plt.plot(y, ssim_unweighted, label="Without Heuristic Weighting", color="red")
-    plt.xlabel("Video Number")
-    plt.ylabel("Mean SSIM of Video")
-    plt.title("Unweighted SSIM")
-    plt.show()
-
 def eval_warp(config):
     mode = config.EVAL.eval_mode
     network, save_path_root_deblur, save_path_root_deblur_score, ckpt_name,\
