@@ -186,7 +186,7 @@ class Network(nn.Module):
                 I_next_next = I_next_next * weights[4]
 
         else:
-            print("No weights used")
+            pass
         base = self.base_conv(I_curr)
         inp_prev = self.inp_prev_conv(torch.cat((I_prev_prev, I_prev, R_prev, I_next, I_next_next), axis = 1))
         n = torch.cat((base, inp_prev), axis = 1)
