@@ -151,19 +151,6 @@ class Network(nn.Module):
         self.post_f_prev = None
 
     def forward(self, I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,use_weights=True):
-        def compute_sobel_weight_map(tensor_img):
-            # Assumes input shape: [B, C, H, W]
-            b, c, h, w = tensor_img.shape
-            img_np = tensor_img[0].permute(1, 2, 0).detach().cpu().numpy()  # (H, W, C)
-            img_gray = cv2.cvtColor((img_np * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY)
-        
-            # Sobel edge detection
-            sobelx = cv2.Sobel(img_gray, cv2.CV_64F, 1, 0, ksize=3)
-            sobely = cv2.Sobel(img_gray, cv2.CV_64F, 0, 1, ksize=3)
-            sobel_magnitude = np.sqrt(sobelx ** 2 + sobely ** 2)
-        
-            # Return mean edge strength as sharpness score
-            return np.mean(sobel_magnitude)
         pre_f_l, corr_l, flow_l = [], [], []
         aux_l = []
         motion_layer_index = list(range(self.HG_num - len(self.skip_corr_index)))
