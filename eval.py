@@ -232,31 +232,6 @@ def eval_quan_qual(config):
         file.write('\n[TOTAL {}|{}] PSNR: {:.5f} SSIM: {:.5f} ({:.5f}sec)\n'.format(ckpt_name, config.EVAL.data, PSNR_mean_total, SSIM_mean_total, total_itr_time))
         file.close()
     print('\nSaving root: ', save_path_root_deblur)
-    
-    x=list(range(len(psnr_unweighted)))
-    y=list(range(len(ssim_unweighted)))
-
-    # PSNR plot
-    plt.figure(figsize=(10, 4))
-    plt.plot(x, psnr_unweighted, label="Without Weighting", color="red")
-    plt.xlabel("Frame Index")
-    plt.ylabel("PSNR")
-    plt.title("PSNR Comparison")
-    plt.legend()
-    plt.grid()
-    plt.savefig("psnr_comparison.png")
-    
-    # SSIM plot
-    plt.figure(figsize=(10, 4))
-    plt.plot(y, ssim_unweighted, label="Without Weighting", color="red")
-    plt.xlabel("Frame Index")
-    plt.ylabel("SSIM")
-    plt.title("SSIM Comparison")
-    plt.legend()
-    plt.grid()
-    plt.savefig("ssim_comparison.png")
-
-
 def eval_MC_cost(config):
     mode = config.EVAL.eval_mode
     network, save_path_root_deblur, save_path_root_deblur_score, ckpt_name,\
@@ -750,3 +725,26 @@ def eval(config):
         eval_MC_cost(config)
     else:
         eval_quan_qual(config)
+        x=list(range(1,len(psnr_unweighted)+1))
+        y=list(range(1,len(psnr_unweighted)+1))
+        # Plot PSNR
+        plt.figure(figsize=(10, 5))
+        plt.plot(x, psnr_unweighted, label="Unweighted PSNR", marker='o', color='red')
+        plt.title("Unweighted PSNR")
+        plt.xlabel("Video Number")
+        plt.ylabel("PSNR")
+        plt.grid(True)
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
+        
+        # Plot SSIM
+        plt.figure(figsize=(10, 5))
+        plt.plot(x, ssim_unweighted, label="Unweighted SSIM", marker='o', color='blue')
+        plt.title("Unweighted SSIM")
+        plt.xlabel("Video Number")
+        plt.ylabel("SSIM")
+        plt.grid(True)
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
