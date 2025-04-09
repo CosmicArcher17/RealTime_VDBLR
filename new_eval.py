@@ -799,12 +799,12 @@ def eval(config):
         eval_MC_cost(config)
     else:
         eval_quan_qual(config)
-        x=list(range(1,len(psnr_unweighted)+1))
-        y=list(range(1,len(psnr_unweighted)+1))
+        x=list(range(1,len(psnr_weighted)+1))
+        y=list(range(1,len(psnr_weighted)+1))
         # Plot PSNR
         plt.figure(figsize=(10, 5))
-        plt.plot(x, psnr_unweighted, label="Unweighted PSNR", marker='o', color='red')
-        plt.title("Unweighted PSNR")
+        plt.plot(x, psnr_weighted, label="Weighted PSNR", marker='o', color='red')
+        plt.title("Weighted PSNR")
         plt.xlabel("Video Number")
         plt.ylabel("PSNR")
         plt.grid(True)
@@ -814,7 +814,7 @@ def eval(config):
         
         # Plot SSIM
         plt.figure(figsize=(10, 5))
-        plt.plot(x, ssim_unweighted, label="Unweighted SSIM", marker='o', color='blue')
+        plt.plot(x, ssim_weighted, label="Weighted SSIM", marker='o', color='blue')
         plt.title("Unweighted SSIM")
         plt.xlabel("Video Number")
         plt.ylabel("SSIM")
