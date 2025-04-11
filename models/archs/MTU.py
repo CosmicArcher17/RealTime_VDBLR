@@ -151,6 +151,16 @@ class Network(nn.Module):
         self.post_f_prev = None
 
     def forward(self, I_prev_prev, I_prev, I_curr, I_next, I_next_next, R_prev, is_first_frame,use_weights=True):
+        def compute_sobel_weight_map(tensor_img):
+            b, c, h, w = tensor_img.shape
+            img_np = tensor_img[0].permute(1, 2, 0).cpu().numpy()
+            img_gray = cv2.cvtColor((img_np * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY)
+            
+            grad_x = cv2.Sobel(img_gray, cv2.CV_64F, 1, 0, ksize=3)
+            grad_y = cv2.Sobel(img_gray, cv2.CV_64F, 0, 1, ksize=3)
+            magnitude = np.sqrt(grad_x**2 + grad_y**2)
+            
+            return float(np.mean(magnitude))
         pre_f_l, corr_l, flow_l = [], [], []
         aux_l = []
         motion_layer_index = list(range(self.HG_num - len(self.skip_corr_index)))
