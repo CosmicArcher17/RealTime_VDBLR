@@ -147,20 +147,20 @@ def eval_quan_qual(config):
             I_next_next = Is[:, 4, :, :, :]
 
             # Compute weights for each of the 5 frames
-            weights = []
-            for frame in [I_prev_prev, I_prev, I_curr, I_next, I_next_next]:
-                weights.append(compute_sobel_weight_map(frame))
+            # weights = []
+            # for frame in [I_prev_prev, I_prev, I_curr, I_next, I_next_next]:
+            #     weights.append(compute_sobel_weight_map(frame))
             
-            # Normalize weights
-            weights = torch.tensor(weights, device=I_curr.device, dtype=I_curr.dtype)
-            weights = weights / weights.sum()
+            # # Normalize weights
+            # weights = torch.tensor(weights, device=I_curr.device, dtype=I_curr.dtype)
+            # weights = weights / weights.sum()
             
-            # Apply them safely (batch size = 1)
-            I_prev_prev = I_prev_prev * weights[0]
-            I_prev      = I_prev      * weights[1]
-            I_curr      = I_curr      * weights[2]
-            I_next      = I_next      * weights[3]
-            I_next_next = I_next_next * weights[4]
+            # # Apply them safely (batch size = 1)
+            # I_prev_prev = I_prev_prev * weights[0]
+            # I_prev      = I_prev      * weights[1]
+            # I_curr      = I_curr      * weights[2]
+            # I_next      = I_next      * weights[3]
+            # I_next_next = I_next_next * weights[4]
 
             #######################################################################
             ## run network
