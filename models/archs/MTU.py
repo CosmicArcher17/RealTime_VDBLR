@@ -154,25 +154,25 @@ class Network(nn.Module):
         pre_f_l, corr_l, flow_l = [], [], []
         aux_l = []
         motion_layer_index = list(range(self.HG_num - len(self.skip_corr_index)))
-        # if use_weights:
-        #     with torch.no_grad():
-        #         frames = [I_prev_prev, I_prev, I_curr, I_next, I_next_next]
-        #         weights = []
-        #         for f in frames:
-        #             weights.append(compute_sobel_weight_map(f))
+        if use_weights:
+            with torch.no_grad():
+                frames = [I_prev_prev, I_prev, I_curr, I_next, I_next_next]
+                weights = []
+                for f in frames:
+                    weights.append(compute_sobel_weight_map(f))
             
-        #         weights = torch.tensor(weights, device=I_curr.device, dtype=I_curr.dtype)
-        #         weights = weights / weights.sum()  # normalize to sum to 1
+                weights = torch.tensor(weights, device=I_curr.device, dtype=I_curr.dtype)
+                weights = weights / weights.sum()  # normalize to sum to 1
             
-        #         # Apply weights to each frame
-        #         I_prev_prev = I_prev_prev * weights[0]
-        #         I_prev = I_prev * weights[1]
-        #         I_curr = I_curr * weights[2]
-        #         I_next = I_next * weights[3]
-        #         I_next_next = I_next_next * weights[4]
+                # Apply weights to each frame
+                I_prev_prev = I_prev_prev * weights[0]
+                I_prev = I_prev * weights[1]
+                I_curr = I_curr * weights[2]
+                I_next = I_next * weights[3]
+                I_next_next = I_next_next * weights[4]
 
-        # else:
-        #     pass
+        else:
+            pass
         base = self.base_conv(I_curr)
         inp_prev = self.inp_prev_conv(torch.cat((I_prev_prev, I_prev, R_prev, I_next, I_next_next), axis = 1))
         n = torch.cat((base, inp_prev), axis = 1)
