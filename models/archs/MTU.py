@@ -161,6 +161,9 @@ class Network(nn.Module):
             magnitude = np.sqrt(grad_x**2 + grad_y**2)
             
             return float(np.mean(magnitude))
+        if is_first_frame:
+            self.pre_f_l_prev = [None]*self.HG_num
+            self.post_f_prev = None
         pre_f_l, corr_l, flow_l = [], [], []
         aux_l = []
         motion_layer_index = list(range(self.HG_num - len(self.skip_corr_index)))
