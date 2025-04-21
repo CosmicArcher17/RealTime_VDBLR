@@ -172,9 +172,8 @@ class Network(nn.Module):
                     weights.append(compute_sobel_weight_map(f))
             
                 weights = torch.tensor(weights, device=I_curr.device, dtype=I_curr.dtype)
-                weights = weights / weights.sum()  # normalize to sum to 1
+                weights = weights / weights.sum()
             
-                # Apply weights to each frame
                 I_prev_prev = I_prev_prev * weights[0]
                 I_prev = I_prev * weights[1]
                 I_curr = I_curr * weights[2]
